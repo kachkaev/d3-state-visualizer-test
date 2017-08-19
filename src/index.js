@@ -49,14 +49,16 @@ const config = {
   tooltipOptions: { offset: { left: 30, top: 10 }, indentationSize: 2 },
   transitionDuration: 700
 };
-const stateDuration = 1000
+const stateDuration = 2000
 
+const oldRender = oldTree(document.getElementById('oldRoot'), update(config, { id: {$set: 'oldTreeExample'}}));
 const render = tree(document.getElementById('root'), config);
-const oldRender = oldTree(document.getElementById('oldRoot'), config);
 
 let i = 0;
-setInterval(() => {
+const updateState = () => {
   i = (i + 1) % appStates.length;
-  render(appStates[i]);
   oldRender(appStates[i]);
-}, stateDuration);
+  render(appStates[i]);
+}
+setInterval(updateState, stateDuration);
+updateState();
