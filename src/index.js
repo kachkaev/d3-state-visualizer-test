@@ -3,7 +3,7 @@ import oldTree from './lib-before-fix/charts/tree/tree';
 import update from 'immutability-helper';
 
 const defaultAppState = {
-  test: [1],
+  test: [0],
   todoStore: {
     todos: [
       { title: 'd3' },
@@ -11,31 +11,31 @@ const defaultAppState = {
       { title: 'visualizer' },
       { title: 'tree' },
     ],
+    completedCount: 1
   },
 };
 
 const appStates = [defaultAppState];
 appStates.push(
-  update(defaultAppState, { todoStore: { completedCount: {$set: 42 } } })
+  update(appStates[appStates.length - 1], { todoStore: { todos: { $unshift: [{ title: 'hey' }] } } })
 );
 appStates.push(
-  update(appStates[1], { todoStore: { todos: { $unshift: [{ title: 'hey' }] } } })
+  update(appStates[appStates.length - 1], { test: {$push: [1]}} )
 );
 appStates.push(
-  update(appStates[2], { todoStore: { todos: {
-    0: {$set: [{ title: 'tada' }] },
-    2: {$set: [{ title: 'tada' }] },
-    4: {$set: [{ title: 'tada' }] }
-  } }})
+  update(appStates[appStates.length - 1], { test: {$push: [2]}} )
 );
 appStates.push(
-  update(appStates[3], { test: {$push: [2]}} )
-  // update(appState, { $unset: ['todoStore']})
+  update(appStates[appStates.length - 1], { test: {$push: [3]}} )
 );
 appStates.push(
-  update(defaultAppState, { todoStore: { $unset: ['todos']} })
-  // update(appState, { $unset: ['todoStore']})
+  update(appStates[appStates.length - 1], { test: {
+    1: {$set: [42] },
+    3: {$set: [42] },
+  } })
 );
+
+appStates.push(update(appStates[appStates.length - 1], { todoStore: { $set: {}}}));
 
 const config = {
   state: defaultAppState,
